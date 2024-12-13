@@ -1,0 +1,125 @@
+Problem: Fancy String(l-1957)
+Ensure no three consecutive characters in a string are the same by deleting the minimum number of characters.
+
+Approach:
+StringBuilder:
+Use a StringBuilder to construct the result.
+Iterate through String:
+Traverse the string character by character.
+If the last two characters in the result are the same as the current character, skip it.
+Otherwise, append it to the result.
+Algorithm:
+Initialize an empty StringBuilder.
+Traverse the input string:
+If the last two characters in the result match the current character, skip it.
+Otherwise, append it to the result.
+Return the result string.
+
+Code:
+class Solution {
+    public String makeFancyString(String s) {
+        StringBuilder result = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            int len = result.length();
+            if (len >= 2 && result.charAt(len - 1) == c && result.charAt(len - 2) == c) {
+                continue; // Skip if adding creates three consecutive characters
+            }
+            result.append(c);
+        }
+        return result.toString();
+    }
+}
+
+Complexity:
+Time Complexity: 
+𝑂(𝑛)
+O(n), where n is the length of the string.
+Space Complexity: 
+𝑂(𝑛):O(n), for storing the result.
+Examples:
+Input: "leeetcode" → Output: "leetcode".
+Input: "aaabaaaa" → Output: "aabaa".
+Input: "aab" → Output: "aab".
+
+----------------- GFG -------------------
+Problem: Maximum Circular Absolute Difference Sum
+Given an array of positive integers, the task is to maximize the sum of absolute differences between consecutive elements in a circular arrangement of the array.
+
+Approach:
+Key Insight:
+To maximize the sum of absolute differences, arrange the array such that:
+Smaller elements and larger elements alternate.
+This ensures the maximum difference between consecutive elements.
+Steps:
+Sort the array in ascending order.
+Arrange elements alternately from both ends of the sorted array:
+First, pick the largest available element.
+Then, pick the smallest available element.
+Compute the absolute differences between consecutive elements in this arrangement.
+Circular Condition:
+Add the absolute difference between the first and last element to account for the circular property.
+Algorithm:
+Sort the array.
+Use two pointers (i for the smallest element, j for the largest element).
+Construct a new arrangement alternately using elements pointed to by i and j.
+Compute the sum of absolute differences for the new arrangement, including the circular difference.
+Code (Java):
+java
+Copy code
+import java.util.*;
+
+class Solution {
+    public int maxCircularDifferenceSum(int[] arr) {
+        Arrays.sort(arr); // Sort the array
+        int n = arr.length;
+        List<Integer> shuffled = new ArrayList<>();
+        
+        // Alternate picking from largest and smallest
+        int i = 0, j = n - 1;
+        while (i <= j) {
+            if (i == j) {
+                shuffled.add(arr[i]); // Add the middle element (if n is odd)
+            } else {
+                shuffled.add(arr[j--]); // Add the largest remaining element
+                shuffled.add(arr[i++]); // Add the smallest remaining element
+            }
+        }
+        
+        // Calculate the sum of absolute differences
+        int maxSum = 0;
+        for (int k = 0; k < n; k++) {
+            maxSum += Math.abs(shuffled.get(k) - shuffled.get((k + 1) % n));
+        }
+        
+        return maxSum;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        int[] arr1 = {4, 2, 1, 8};
+        int[] arr2 = {10, 12};
+        System.out.println(sol.maxCircularDifferenceSum(arr1)); // Output: 18
+        System.out.println(sol.maxCircularDifferenceSum(arr2)); // Output: 4
+    }
+}
+Complexity:
+Time Complexity:
+Sorting the array: O(nlogn).
+Rearranging and calculating the sum:O(n).
+Total: O(nlogn).
+Space Complexity: O(n) for storing the rearranged array.
+Examples:
+Example 1:
+Input: arr = [4, 2, 1, 8]
+Sorted: [1, 2, 4, 8]
+Rearranged: [8, 1, 4, 2]
+Sum:
+∣8−1∣+∣1−4∣+∣4−2∣+∣2−8∣=7+3+2+6=18
+Output: 18.
+Example 2:
+Input: arr = [10, 12]
+Sorted: [10, 12]
+Rearranged: [12, 10]
+Sum:
+∣12−10∣+∣10−12∣=2+2=4
+Output: 4.
